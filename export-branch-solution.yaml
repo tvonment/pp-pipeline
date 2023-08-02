@@ -15,6 +15,9 @@ on:
       tenant_id:
         description: 'tenant id of the app registration'
         required: true
+    secrets:
+      - APP_SECRET
+      - PAT
 
 env:
   SOLUTION_EXPORTED_FOLDER: out/exported/
@@ -64,5 +67,5 @@ jobs:
       with:
         solution-folder: ${{ env.SOLUTION_FOLDER}}/${{ inputs.solution_name }}
         solution-target-folder: ${{ env.SOLUTION_TARGET_FOLDER}}/${{ inputs.solution_name }}
-        repo-token: ${{ secrets.PAT_TVONMENT }}
+        repo-token: ${{ secrets.PAT }}
         allow-empty-commit: true
