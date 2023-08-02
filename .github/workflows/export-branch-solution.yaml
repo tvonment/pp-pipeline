@@ -22,11 +22,9 @@ on:
     secrets:
       APP_SECRET:
         description: 'client secret of the app registration'
-        type: string
         required: true
       PAT:
         description: 'personal access token for the repository'
-        type: string
         required: true
 
 env:
