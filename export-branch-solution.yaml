@@ -1,20 +1,22 @@
 name: export-and-branch-solution
 
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       solution_name:
         description: 'name of the solution to worked on from Power Platform'
         required: true
-        default: 
       environment_url:
         description: 'url of the environment for export of the solution'
         required: true
-        default: 
+      client_id:
+        description: 'client id of the app registration'
+        required: true
+      tenant_id:
+        description: 'tenant id of the app registration'
+        required: true
 
 env:
-  CLIENT_ID: ''
-  TENANT_ID: ''
   SOLUTION_EXPORTED_FOLDER: out/exported/
   SOLUTION_FOLDER: out/solutions/
   SOLUTION_TARGET_FOLDER: solutions/
@@ -34,18 +36,18 @@ jobs:
       uses: microsoft/powerplatform-actions/who-am-i@v0
       with:
         environment-url: ${{ inputs.environment_url }}
-        app-id: ${{env.CLIENT_ID}}
+        app-id: ${{inputs.client_id}}
         client-secret: ${{ secrets.APP_SECRET }}
-        tenant-id: ${{env.TENANT_ID}}
+        tenant-id: ${{inputs.tenant_id}}
 
 
     - name: export-solution action
       uses: microsoft/powerplatform-actions/export-solution@v0
       with:
         environment-url: ${{ inputs.environment_url }}
-        app-id: ${{ env.CLIENT_ID }}
+        app-id: ${{ inputs.client_id }}
         client-secret: ${{ secrets.APP_SECRET }}
-        tenant-id: ${{env.TENANT_ID}}
+        tenant-id: ${{inputs.tenant_id}}
         solution-name: ${{ inputs.solution_name }}
         solution-output-file: ${{ env.SOLUTION_EXPORTED_FOLDER}}/${{ inputs.solution_name }}.zip
 
