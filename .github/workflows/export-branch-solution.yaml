@@ -16,8 +16,12 @@ on:
         description: 'tenant id of the app registration'
         required: true
     secrets:
-      - APP_SECRET
-      - PAT
+      APP_SECRET:
+        description: 'client secret of the app registration'
+        required: true
+      PAT:
+        description: 'personal access token for the repository'
+        required: true
 
 env:
   SOLUTION_EXPORTED_FOLDER: out/exported/
