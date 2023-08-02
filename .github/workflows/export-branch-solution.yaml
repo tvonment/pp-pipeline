@@ -6,21 +6,27 @@ on:
       solution_name:
         description: 'name of the solution to worked on from Power Platform'
         required: true
+        type: string
       environment_url:
         description: 'url of the environment for export of the solution'
         required: true
+        type: string
       client_id:
         description: 'client id of the app registration'
         required: true
+        type: string
       tenant_id:
         description: 'tenant id of the app registration'
         required: true
+        type: string
     secrets:
       APP_SECRET:
         description: 'client secret of the app registration'
+        type: string
         required: true
       PAT:
         description: 'personal access token for the repository'
+        type: string
         required: true
 
 env:
