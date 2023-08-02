@@ -1,0 +1,66 @@
+name: export-and-branch-solution
+
+on:
+  workflow_dispatch:
+    inputs:
+      solution_name:
+        description: 'name of the solution to worked on from Power Platform'
+        required: true
+        default: 
+      environment_url:
+        description: 'url of the environment for export of the solution'
+        required: true
+        default: 
+
+env:
+  CLIENT_ID: ''
+  TENANT_ID: ''
+  SOLUTION_EXPORTED_FOLDER: out/exported/
+  SOLUTION_FOLDER: out/solutions/
+  SOLUTION_TARGET_FOLDER: solutions/
+
+jobs:
+  export-from-dev:
+    runs-on: windows-latest
+    env:
+      RUNNER_DEBUG: 1
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        lfs: true
+
+    - name: who-am-i action
+      uses: microsoft/powerplatform-actions/who-am-i@v0
+      with:
+        environment-url: ${{ inputs.environment_url }}
+        app-id: ${{env.CLIENT_ID}}
+        client-secret: ${{ secrets.APP_SECRET }}
+        tenant-id: ${{env.TENANT_ID}}
+
+
+    - name: export-solution action
+      uses: microsoft/powerplatform-actions/export-solution@v0
+      with:
+        environment-url: ${{ inputs.environment_url }}
+        app-id: ${{ env.CLIENT_ID }}
+        client-secret: ${{ secrets.APP_SECRET }}
+        tenant-id: ${{env.TENANT_ID}}
+        solution-name: ${{ inputs.solution_name }}
+        solution-output-file: ${{ env.SOLUTION_EXPORTED_FOLDER}}/${{ inputs.solution_name }}.zip
+
+    - name: unpack-solution action
+      uses: microsoft/powerplatform-actions/unpack-solution@v0
+      with:
+        solution-file: ${{ env.SOLUTION_EXPORTED_FOLDER}}/${{ inputs.solution_name }}.zip
+        solution-folder: ${{ env.SOLUTION_FOLDER}}/${{ inputs.solution_name }}
+        solution-type: 'Unmanaged'
+        overwrite-files: true
+
+    - name: branch-solution, prepare it for a PullRequest
+      uses: microsoft/powerplatform-actions/branch-solution@v0
+      with:
+        solution-folder: ${{ env.SOLUTION_FOLDER}}/${{ inputs.solution_name }}
+        solution-target-folder: ${{ env.SOLUTION_TARGET_FOLDER}}/${{ inputs.solution_name }}
+        repo-token: ${{ secrets.PAT_TVONMENT }}
+        allow-empty-commit: true
