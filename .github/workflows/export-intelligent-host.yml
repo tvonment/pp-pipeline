@@ -1,0 +1,16 @@
+name: Export Intelligent Host
+
+on:
+  workflow_dispatch:
+
+jobs:
+  call-child-workflow:
+    uses: ./.github/workflows/export-and-branch-solution.yml
+    with:
+      solution_name: ${{ vars.ihost_dev_solution_name }}
+      environment_url: ${{ vars.ihost_dev_environment_url }}
+      client_id: ${{ vars.ihost_dev_client_id }}
+      tenant_id: ${{ vars.ihost_dev_tenant_id }}
+    secrets:
+      APP_SECRET: ${{ secrets.IHOST_DEV_APP_SECRET }}
+      PAT: ${{ secrets.IHOST_DEV_PAT }}
